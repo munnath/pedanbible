@@ -178,7 +178,7 @@
 
 <button id="showSolution">Afficher la solution</button>
 <h2 id="chapterTitle" style="display: none;">
-    Le chapitre choisi était : Job 17 !
+    Le chapitre choisi était : Psaumes 140 !
 </h2>
 
 <script>
@@ -529,10 +529,10 @@ books.forEach(book => {
     }
     button.addEventListener("click", function() {
     console.log("Livre cliqué :", book.name); // Debugging
-    console.log("Livre à trouver :", "Job 17".replace(/\s*\d+$/, ""));
+    console.log("Livre à trouver :", "Psaumes 140".replace(/\s*\d+$/, ""));
     console.log("Livre complet cliqué :", booksMapping[book.name]); // Debugging
 
-    let chapter_str = "Job 17".replace(/\s*\d+$/, "");
+    let chapter_str = "Psaumes 140".replace(/\s*\d+$/, "");
 
     if (booksMapping[book.name] === chapter_str) {
         button.classList.add("correct");
