@@ -1,0 +1,6992 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PedanBible</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input, button { padding: 10px; margin: 10px; font-size: 18px; }
+        #message { font-size: 20px; margin-top: 20px; }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 800px;
+            margin: auto;
+        }
+        .category-container {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .category-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .livre {
+
+            font-size: 25px;
+            padding: 1px;
+            padding-left: 30px; /* Décale le texte vers la droite */
+            margin: 1px;
+            border-radius: 10px;
+            color: black;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            width: 10px;
+            height: 100px;
+            transition: transform 0.2s;
+
+            writing-mode: vertical-rl; /* Texte écrit verticalement de droite à gauche */
+
+            text-align: center;
+        }
+        .livre:hover {
+            transform: scale(1.1);
+        }
+        .correct { background: linear-gradient(to right, #32CD32, #2E8B57) !important; }
+        .wrong { background: linear-gradient(to right, #FF0000, #B22222) !important; }
+    </style>
+</head>
+<body>
+
+    <h1>PedanBible</h1>
+
+    <h1>📖 Jeu des Livres de la Bible</h1>
+
+    <div id="bibleBooks"></div>
+
+    <p>Essayez de deviner les mots du texte biblique du jour.</p>
+
+    <input type="text" id="wordInput" placeholder="Tapez un mot...">
+    <button onclick="checkWord()">Valider</button>
+    <button id="hintButton" onclick="revealHint()">Indice</button>
+
+    <p id="message"></p>
+
+    <script>
+        function checkWord() {
+            let word = document.getElementById("wordInput").value;
+            fetch("/guess", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ word: word })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("message").textContent = data.message;
+            });
+        }
+
+function revealHint() {
+    let hiddenWords = Array.from(document.querySelectorAll(".hidden-word"))
+        .filter(span => !span.classList.contains("revealed")); // Filtrer les mots non trouvés
+
+    if (hiddenWords.length > 0) {
+        let randomWord = hiddenWords[Math.floor(Math.random() * hiddenWords.length)].dataset.word;
+
+        // Révèle toutes les occurrences du mot sélectionné
+        hiddenWords.forEach(span => {
+            if (span.dataset.word === randomWord) {
+                span.textContent = span.dataset.word; // Remplace les "█" par le mot original
+                span.classList.add("revealed"); // Applique la classe de mot révélé
+            }
+        });
+    }
+
+    // Vérifie si tous les mots sont trouvés pour cacher le bouton indice
+    if (document.querySelectorAll(".hidden-word:not(.revealed)").length === 0) {
+        document.getElementById("hintButton").style.display = "none";
+    }
+}
+
+    </script>
+
+<div id="wordProgress">
+    <span id="noWords" class="red-square"></span> 
+</div>
+
+<p id="maskedText">
+    
+        
+            <span class="hidden-word" data-word="Un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="jour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sabbat">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Jésus">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="se">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="rendit">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="chez">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="des">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="chefs">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="des">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Pharisiens">██████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="y">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="prendre">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="repas">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Ceux">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="étaient">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="là">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="observaient">███████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="attentivement">█████████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Jésus">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="homme">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="atteint">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="d">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="hydropisie">██████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="se">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tenait">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="devant">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="lui">███</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Jésus">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="prit">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="la">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="parole">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="demanda">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="aux">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="maîtres">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="la">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="loi">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="aux">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Pharisiens">██████████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">«</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Notre">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="loi">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="permet">██████</span>
+        
+    
+        
+            <span class="punctuation">-</span>
+        
+    
+        
+            <span class="hidden-word" data-word="elle">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ou">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="non">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="faire">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="une">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="guérison">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="jour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="du">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sabbat">██████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">?</span>
+        
+    
+        
+            <span class="punctuation">»</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Mais">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ils">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ne">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="voulurent">█████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pas">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="répondre">████████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Alors">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Jésus">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="toucha">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="malade">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="guérit">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="renvoya">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Puis">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="leur">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dit">███</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">«</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Si">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="l">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="vous">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="a">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="fils">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ou">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="boeuf">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tombe">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dans">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="puits">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ne">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="va">██</span>
+        
+    
+        
+            <span class="punctuation">-</span>
+        
+    
+        
+            <span class="hidden-word" data-word="t">█</span>
+        
+    
+        
+            <span class="punctuation">-</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pas">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="l">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="en">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="retirer">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="aussitôt">████████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="même">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="jour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="du">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sabbat">██████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">?</span>
+        
+    
+        
+            <span class="punctuation">»</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Ils">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="furent">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="incapables">██████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="répondre">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="cela">████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Jésus">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="remarqua">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="comment">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="invités">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="choisissaient">█████████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="meilleures">██████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="places">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dit">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="alors">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tous">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="cette">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="parabole">████████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">«</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Lorsque">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="quelqu">██████</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="t">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="invite">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="repas">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mariage">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ne">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="va">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pas">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="t">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="asseoir">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="la">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="meilleure">█████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="place">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="se">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pourrait">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="en">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="effet">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="que">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="quelqu">██████</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="plus">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="important">█████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="que">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="toi">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ait">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="été">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="invité">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="que">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="celui">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="vous">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="a">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="invités">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="l">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="l">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="autre">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="vienne">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="te">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dire">████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">&lt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Laisse">██████</span>
+        
+    
+        
+            <span class="punctuation">-</span>
+        
+    
+        
+            <span class="hidden-word" data-word="lui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="cette">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="place">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="punctuation">&gt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Alors">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tu">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="devrais">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tout">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="honteux">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="te">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mettre">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="la">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dernière">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="place">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Au">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="contraire">█████████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="lorsque">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tu">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="es">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="invité">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="va">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="t">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="installer">█████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="la">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dernière">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="place">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qu">██</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="au">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="moment">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="où">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="viendra">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="celui">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="t">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="a">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="invité">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="te">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dise">████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">&lt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Mon">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ami">███</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="viens">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="t">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="asseoir">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="une">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="meilleure">█████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="place">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="punctuation">&gt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Ainsi">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ce">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sera">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="toi">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="honneur">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="devant">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tous">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ceux">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="seront">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="table">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="avec">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="toi">███</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="En">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="effet">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="quiconque">█████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="s">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="élève">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sera">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="abaissé">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="celui">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="s">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="abaisse">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sera">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="élevé">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="punctuation">»</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Puis">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Jésus">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dit">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="celui">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="l">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="avait">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="invité">██████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">«</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Quand">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tu">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="donnes">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="déjeuner">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ou">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dîner">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="n">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="invite">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ni">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tes">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="amis">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ni">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tes">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="frères">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ni">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="membres">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ta">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="parenté">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ni">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tes">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="riches">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="voisins">███████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="car">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ils">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pourraient">██████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="t">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="inviter">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="leur">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tu">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="serais">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ainsi">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="payé">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ce">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="que">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tu">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="as">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="donné">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Mais">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="quand">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tu">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="offres">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="repas">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="fête">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="invite">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pauvres">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="infirmes">████████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="boiteux">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="aveugles">████████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Tu">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="seras">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="heureux">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="car">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ils">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ne">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="peuvent">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pas">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="te">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="rendre">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Dieu">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="te">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="rendra">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="lorsque">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ceux">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ont">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="fait">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="bien">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="se">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="relèveront">██████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="la">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mort">████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="punctuation">»</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Après">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="avoir">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="entendu">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ces">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mots">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ceux">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="étaient">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="table">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dit">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Jésus">█████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">«</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Heureux">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="celui">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="prendra">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="son">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="repas">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dans">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Royaume">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Dieu">████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">!</span>
+        
+    
+        
+            <span class="punctuation">»</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Jésus">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="lui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="raconta">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="cette">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="parabole">████████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">«</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="homme">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="offrit">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="grand">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="repas">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="auquel">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="invita">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="beaucoup">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="monde">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="A">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="l">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="heure">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="du">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="repas">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="envoya">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="son">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="serviteur">█████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dire">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="aux">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="invités">███████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">&lt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Venez">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="car">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="c">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="est">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="prêt">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="maintenant">██████████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="punctuation">&gt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Mais">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tous">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="l">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="après">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="l">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="autre">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="se">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mirent">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="s">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="excuser">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="premier">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dit">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="au">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="serviteur">█████████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">&lt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="J">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ai">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="acheté">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="champ">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="faut">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="que">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="j">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="aille">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="voir">████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="je">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="te">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="prie">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="m">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="excuser">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="punctuation">&gt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="autre">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="lui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dit">███</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">&lt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="J">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ai">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="acheté">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="cinq">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="paires">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="boeufs">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="je">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="vais">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="essayer">███████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="je">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="te">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="prie">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="m">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="excuser">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="punctuation">&gt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="autre">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="encore">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dit">███</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">&lt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Je">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="viens">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="me">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="marier">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="c">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="est">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pourquoi">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="je">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ne">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="peux">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pas">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="y">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="aller">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="punctuation">&gt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="serviteur">█████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="retourna">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="auprès">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="son">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="maître">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="lui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="rapporta">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ces">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="réponses">████████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="maître">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="la">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="maison">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="se">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mit">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="en">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="colère">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dit">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="son">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="serviteur">█████████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">&lt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Va">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="vite">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sur">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="places">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dans">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="rues">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="la">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ville">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="amène">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ici">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pauvres">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="infirmes">████████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="aveugles">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="boiteux">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="punctuation">&gt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Après">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="moment">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="serviteur">█████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="vint">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dire">████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">&lt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Maître">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tes">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ordres">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ont">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="été">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="exécutés">████████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mais">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="y">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="a">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="encore">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="la">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="place">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="punctuation">&gt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="maître">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dit">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="alors">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="son">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="serviteur">█████████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">&lt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Va">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sur">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="chemins">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="campagne">████████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="long">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="des">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="haies">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="oblige">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="gens">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="entrer">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="afin">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="que">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ma">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="maison">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="soit">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="remplie">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Je">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="vous">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dis">███</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="hidden-word" data-word="aucun">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ceux">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="avaient">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="été">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="invités">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ne">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mangera">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mon">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="repas">█████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">!</span>
+        
+    
+        
+            <span class="punctuation">&gt;</span>
+        
+    
+        
+            <span class="punctuation">»</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Une">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="foule">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="immense">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="faisait">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="route">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="avec">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Jésus">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="se">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="retourna">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dit">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tous">████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">«</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Celui">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="vient">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="moi">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="doit">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="me">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="préférer">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="son">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="père">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sa">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mère">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sa">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="femme">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ses">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="enfants">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ses">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="frères">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ses">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="soeurs">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="même">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sa">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="propre">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="personne">████████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Sinon">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ne">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="peut">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pas">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="être">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mon">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="disciple">████████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Celui">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ne">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="porte">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pas">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sa">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="croix">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="me">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="suivre">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ne">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="peut">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pas">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="être">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mon">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="disciple">████████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Si">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="l">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="vous">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="veut">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="construire">██████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="une">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tour">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="s">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="assied">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="d">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="abord">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="calculer">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="la">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dépense">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="et">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="voir">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="s">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="a">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="assez">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="d">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="argent">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="achever">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="travail">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Autrement">█████████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="s">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pose">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="les">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="fondations">██████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sans">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pouvoir">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="achever">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="la">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tour">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tous">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ceux">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="verront">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="cela">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="se">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mettront">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="rire">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="lui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="en">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="disant">██████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">:</span>
+        
+    
+        
+            <span class="punctuation">&lt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Cet">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="homme">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="a">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="commencé">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="construire">██████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mais">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="a">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="été">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="incapable">█████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="d">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="achever">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="travail">███████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">!</span>
+        
+    
+        
+            <span class="punctuation">&gt;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="De">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="même">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="si">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="roi">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="veut">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="partir">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="en">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="guerre">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="contre">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="un">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="autre">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="roi">███</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="s">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="assied">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="d">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="abord">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="examiner">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="s">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="peut">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="avec">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dix">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mille">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="hommes">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="affronter">█████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="son">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="adversaire">██████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="marche">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="contre">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="lui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="avec">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="vingt">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mille">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="hommes">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="S">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ne">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="peut">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pas">███</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="envoie">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="des">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="messagers">█████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="l">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="autre">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="roi">███</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pendant">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qu">██</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="est">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="encore">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="loin">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="lui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="demander">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ses">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="conditions">██████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="paix">████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Ainsi">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="donc">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ajouta">██████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Jésus">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="aucun">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="de">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="vous">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ne">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="peut">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="être">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="mon">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="disciple">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="s">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ne">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="renonce">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pas">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="à">█</span>
+        
+    
+        
+            <span class="hidden-word" data-word="tout">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ce">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="qu">██</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="possède">███████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="punctuation">»</span>
+        
+    
+        
+            <span class="punctuation">«</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="sel">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="est">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="une">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="bonne">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="chose">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Mais">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="s">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="perd">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="son">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="goût">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="comment">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pourrait">████████</span>
+        
+    
+        
+            <span class="punctuation">-</span>
+        
+    
+        
+            <span class="hidden-word" data-word="on">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="lui">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="rendre">██████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">?</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Il">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="n">█</span>
+        
+    
+        
+            <span class="punctuation no-space">&#39;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="est">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="alors">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="bon">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ni">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="la">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="terre">█████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="ni">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="fumier">██████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">;</span>
+        
+    
+        
+            <span class="hidden-word" data-word="on">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="le">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="jette">█████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="dehors">██████</span>
+        
+    
+        
+            <span class="punctuation space-after">.</span>
+        
+    
+        
+            <span class="hidden-word" data-word="Écoutez">███████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="bien">████</span>
+        
+    
+        
+            <span class="punctuation space-after">,</span>
+        
+    
+        
+            <span class="hidden-word" data-word="si">██</span>
+        
+    
+        
+            <span class="hidden-word" data-word="vous">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="avez">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="des">███</span>
+        
+    
+        
+            <span class="hidden-word" data-word="oreilles">████████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="pour">████</span>
+        
+    
+        
+            <span class="hidden-word" data-word="entendre">████████</span>
+        
+    
+        
+            <span class="punctuation space-before-after">!</span>
+        
+    
+        
+            <span class="punctuation">»</span>
+        
+    
+</p>
+
+<style>
+    .hidden-word {
+        font-size: 18px;
+        margin: 2px;
+        padding: 5px;
+        display: inline-block;
+        background: black;
+        color: black;  /* Texte caché */
+        border-radius: 5px;
+    }
+    .revealed {
+        font-size: 18px;
+        background: none !important;
+        color: black !important;  /* Texte révélé */
+    }
+
+    .punctuation {
+        font-size: 18px;
+        /*white-space: pre;*/ /* Préserve l'espace */
+        /*display: inline-block;*/
+        color: black; /* 🔹 La ponctuation est visible */
+    }
+    .similar {
+        font-size: 18px;
+        background: gray;
+        color: orange;
+    }
+
+    .no-space {
+        margin: 0;
+    }
+
+    .space-after {
+        margin-right: 0.15em;
+    }
+
+    .space-before-after {
+        margin-left: 0.15em;
+        margin-right: 0.15em;
+    }
+
+    .red-square, .green-square {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        margin: 5px;
+        border-radius: 5px;
+    }
+    .newly-found {
+        font-size: 18px;
+        color: green !important; /* 🔹 Affichage temporaire en vert */
+        font-weight: bold;
+        background: none !important; /* Supprime le fond noir */
+    }
+    .red-square { background-color: red; }
+    .green-square { background-color: green; }
+</style>
+</p>
+</div>
+
+<script>
+    let lastFoundWords = []; // Stocke les derniers mots trouvés
+
+    function highlightNewWords(correctWords) {
+        let words = document.querySelectorAll(".hidden-word");
+
+    // 🔹 Remettre les anciens mots trouvés en noir (mais affichés)
+    words.forEach(span => {
+        if (lastFoundWords.includes(span.dataset.word.toLowerCase())) {
+            span.classList.remove("newly-found");
+            span.classList.add("revealed"); // Noir normal
+        }
+    });
+
+    // 🔹 Mettre en vert les nouveaux mots trouvés
+    correctWords.forEach(word => {
+        words.forEach(span => {
+            if (span.dataset.word.toLowerCase() === word.toLowerCase()) {
+                span.textContent = span.dataset.word; // Remplace par le mot original
+                span.classList.add("newly-found"); // Applique la classe verte temporaire
+            }
+        });
+    });
+
+        // 🔹 Met à jour la liste des derniers mots trouvés
+        lastFoundWords = [...correctWords];
+    }
+
+    function updateProgress(correctCount) {
+    let progressDiv = document.getElementById("wordProgress");
+    progressDiv.innerHTML = ""; // 🔹 Efface tous les anciens carrés
+
+    if (correctCount > 0) {
+        // 🔹 Ajoute autant de carrés verts que d'occurrences du mot trouvé
+        for (let i = 0; i < correctCount; i++) {
+            let greenSquare = document.createElement("span");
+            greenSquare.classList.add("green-square");
+            progressDiv.appendChild(greenSquare);
+        }
+    } else {
+        // 🔹 Si le mot est faux, on affiche 1 carré rouge
+        let redSquare = document.createElement("span");
+        redSquare.classList.add("red-square");
+        progressDiv.appendChild(redSquare);
+    }
+}
+
+function checkWord() {
+    let inputField = document.getElementById("wordInput");
+    let guessedWord = inputField.value.trim(); // 🔹 Ne change pas la casse ici
+    inputField.value = ""; // 🔹 Vide le champ après soumission
+
+
+    fetch("/guess", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ word: guessedWord })
+    })
+    .then(response => response.json())
+    .then(data => {
+        let foundCount = 0;
+        let foundWords = [];
+
+        if (data.success) {
+            let words = document.querySelectorAll(".hidden-word");
+
+            words.forEach(span => {
+                if (span.dataset.word.toLowerCase() === guessedWord.toLowerCase()) {
+                    span.textContent = span.dataset.word; // 🔹 Affiche le mot avec sa casse originale
+                    foundWords.push(guessedWord);
+                    foundCount++;
+                }
+            });
+        }
+
+        // 🔹 Met à jour les couleurs (nouveaux mots en vert)
+        highlightNewWords(foundWords);
+
+        // 🔹 Met à jour les carrés de progression
+        updateProgress(foundCount);
+    });
+}
+
+// 🔹 Associe la fonction au bouton de validation
+document.getElementById("wordInput").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        checkWord();
+    }
+});
+</script>
+
+<div id="solution" style="display: none;">
+    <p>
+        
+            <span>Un</span>
+        
+            <span>jour</span>
+        
+            <span>de</span>
+        
+            <span>sabbat</span>
+        
+            <span>,</span>
+        
+            <span>Jésus</span>
+        
+            <span>se</span>
+        
+            <span>rendit</span>
+        
+            <span>chez</span>
+        
+            <span>un</span>
+        
+            <span>des</span>
+        
+            <span>chefs</span>
+        
+            <span>des</span>
+        
+            <span>Pharisiens</span>
+        
+            <span>pour</span>
+        
+            <span>y</span>
+        
+            <span>prendre</span>
+        
+            <span>un</span>
+        
+            <span>repas</span>
+        
+            <span>.</span>
+        
+            <span>Ceux</span>
+        
+            <span>qui</span>
+        
+            <span>étaient</span>
+        
+            <span>là</span>
+        
+            <span>observaient</span>
+        
+            <span>attentivement</span>
+        
+            <span>Jésus</span>
+        
+            <span>.</span>
+        
+            <span>Un</span>
+        
+            <span>homme</span>
+        
+            <span>atteint</span>
+        
+            <span>d</span>
+        
+            <span>&#39;</span>
+        
+            <span>hydropisie</span>
+        
+            <span>se</span>
+        
+            <span>tenait</span>
+        
+            <span>devant</span>
+        
+            <span>lui</span>
+        
+            <span>.</span>
+        
+            <span>Jésus</span>
+        
+            <span>prit</span>
+        
+            <span>la</span>
+        
+            <span>parole</span>
+        
+            <span>et</span>
+        
+            <span>demanda</span>
+        
+            <span>aux</span>
+        
+            <span>maîtres</span>
+        
+            <span>de</span>
+        
+            <span>la</span>
+        
+            <span>loi</span>
+        
+            <span>et</span>
+        
+            <span>aux</span>
+        
+            <span>Pharisiens</span>
+        
+            <span>:</span>
+        
+            <span>«</span>
+        
+            <span>Notre</span>
+        
+            <span>loi</span>
+        
+            <span>permet</span>
+        
+            <span>-</span>
+        
+            <span>elle</span>
+        
+            <span>ou</span>
+        
+            <span>non</span>
+        
+            <span>de</span>
+        
+            <span>faire</span>
+        
+            <span>une</span>
+        
+            <span>guérison</span>
+        
+            <span>le</span>
+        
+            <span>jour</span>
+        
+            <span>du</span>
+        
+            <span>sabbat</span>
+        
+            <span>?</span>
+        
+            <span>»</span>
+        
+            <span>Mais</span>
+        
+            <span>ils</span>
+        
+            <span>ne</span>
+        
+            <span>voulurent</span>
+        
+            <span>pas</span>
+        
+            <span>répondre</span>
+        
+            <span>.</span>
+        
+            <span>Alors</span>
+        
+            <span>Jésus</span>
+        
+            <span>toucha</span>
+        
+            <span>le</span>
+        
+            <span>malade</span>
+        
+            <span>,</span>
+        
+            <span>le</span>
+        
+            <span>guérit</span>
+        
+            <span>et</span>
+        
+            <span>le</span>
+        
+            <span>renvoya</span>
+        
+            <span>.</span>
+        
+            <span>Puis</span>
+        
+            <span>il</span>
+        
+            <span>leur</span>
+        
+            <span>dit</span>
+        
+            <span>:</span>
+        
+            <span>«</span>
+        
+            <span>Si</span>
+        
+            <span>l</span>
+        
+            <span>&#39;</span>
+        
+            <span>un</span>
+        
+            <span>de</span>
+        
+            <span>vous</span>
+        
+            <span>a</span>
+        
+            <span>un</span>
+        
+            <span>fils</span>
+        
+            <span>ou</span>
+        
+            <span>un</span>
+        
+            <span>boeuf</span>
+        
+            <span>qui</span>
+        
+            <span>tombe</span>
+        
+            <span>dans</span>
+        
+            <span>un</span>
+        
+            <span>puits</span>
+        
+            <span>,</span>
+        
+            <span>ne</span>
+        
+            <span>va</span>
+        
+            <span>-</span>
+        
+            <span>t</span>
+        
+            <span>-</span>
+        
+            <span>il</span>
+        
+            <span>pas</span>
+        
+            <span>l</span>
+        
+            <span>&#39;</span>
+        
+            <span>en</span>
+        
+            <span>retirer</span>
+        
+            <span>aussitôt</span>
+        
+            <span>,</span>
+        
+            <span>même</span>
+        
+            <span>le</span>
+        
+            <span>jour</span>
+        
+            <span>du</span>
+        
+            <span>sabbat</span>
+        
+            <span>?</span>
+        
+            <span>»</span>
+        
+            <span>Ils</span>
+        
+            <span>furent</span>
+        
+            <span>incapables</span>
+        
+            <span>de</span>
+        
+            <span>répondre</span>
+        
+            <span>à</span>
+        
+            <span>cela</span>
+        
+            <span>.</span>
+        
+            <span>Jésus</span>
+        
+            <span>remarqua</span>
+        
+            <span>comment</span>
+        
+            <span>les</span>
+        
+            <span>invités</span>
+        
+            <span>choisissaient</span>
+        
+            <span>les</span>
+        
+            <span>meilleures</span>
+        
+            <span>places</span>
+        
+            <span>.</span>
+        
+            <span>Il</span>
+        
+            <span>dit</span>
+        
+            <span>alors</span>
+        
+            <span>à</span>
+        
+            <span>tous</span>
+        
+            <span>cette</span>
+        
+            <span>parabole</span>
+        
+            <span>:</span>
+        
+            <span>«</span>
+        
+            <span>Lorsque</span>
+        
+            <span>quelqu</span>
+        
+            <span>&#39;</span>
+        
+            <span>un</span>
+        
+            <span>t</span>
+        
+            <span>&#39;</span>
+        
+            <span>invite</span>
+        
+            <span>à</span>
+        
+            <span>un</span>
+        
+            <span>repas</span>
+        
+            <span>de</span>
+        
+            <span>mariage</span>
+        
+            <span>,</span>
+        
+            <span>ne</span>
+        
+            <span>va</span>
+        
+            <span>pas</span>
+        
+            <span>t</span>
+        
+            <span>&#39;</span>
+        
+            <span>asseoir</span>
+        
+            <span>à</span>
+        
+            <span>la</span>
+        
+            <span>meilleure</span>
+        
+            <span>place</span>
+        
+            <span>.</span>
+        
+            <span>Il</span>
+        
+            <span>se</span>
+        
+            <span>pourrait</span>
+        
+            <span>en</span>
+        
+            <span>effet</span>
+        
+            <span>que</span>
+        
+            <span>quelqu</span>
+        
+            <span>&#39;</span>
+        
+            <span>un</span>
+        
+            <span>de</span>
+        
+            <span>plus</span>
+        
+            <span>important</span>
+        
+            <span>que</span>
+        
+            <span>toi</span>
+        
+            <span>ait</span>
+        
+            <span>été</span>
+        
+            <span>invité</span>
+        
+            <span>et</span>
+        
+            <span>que</span>
+        
+            <span>celui</span>
+        
+            <span>qui</span>
+        
+            <span>vous</span>
+        
+            <span>a</span>
+        
+            <span>invités</span>
+        
+            <span>l</span>
+        
+            <span>&#39;</span>
+        
+            <span>un</span>
+        
+            <span>et</span>
+        
+            <span>l</span>
+        
+            <span>&#39;</span>
+        
+            <span>autre</span>
+        
+            <span>vienne</span>
+        
+            <span>te</span>
+        
+            <span>dire</span>
+        
+            <span>:</span>
+        
+            <span>&lt;</span>
+        
+            <span>Laisse</span>
+        
+            <span>-</span>
+        
+            <span>lui</span>
+        
+            <span>cette</span>
+        
+            <span>place</span>
+        
+            <span>.</span>
+        
+            <span>&gt;</span>
+        
+            <span>Alors</span>
+        
+            <span>tu</span>
+        
+            <span>devrais</span>
+        
+            <span>,</span>
+        
+            <span>tout</span>
+        
+            <span>honteux</span>
+        
+            <span>,</span>
+        
+            <span>te</span>
+        
+            <span>mettre</span>
+        
+            <span>à</span>
+        
+            <span>la</span>
+        
+            <span>dernière</span>
+        
+            <span>place</span>
+        
+            <span>.</span>
+        
+            <span>Au</span>
+        
+            <span>contraire</span>
+        
+            <span>,</span>
+        
+            <span>lorsque</span>
+        
+            <span>tu</span>
+        
+            <span>es</span>
+        
+            <span>invité</span>
+        
+            <span>,</span>
+        
+            <span>va</span>
+        
+            <span>t</span>
+        
+            <span>&#39;</span>
+        
+            <span>installer</span>
+        
+            <span>à</span>
+        
+            <span>la</span>
+        
+            <span>dernière</span>
+        
+            <span>place</span>
+        
+            <span>,</span>
+        
+            <span>pour</span>
+        
+            <span>qu</span>
+        
+            <span>&#39;</span>
+        
+            <span>au</span>
+        
+            <span>moment</span>
+        
+            <span>où</span>
+        
+            <span>viendra</span>
+        
+            <span>celui</span>
+        
+            <span>qui</span>
+        
+            <span>t</span>
+        
+            <span>&#39;</span>
+        
+            <span>a</span>
+        
+            <span>invité</span>
+        
+            <span>,</span>
+        
+            <span>il</span>
+        
+            <span>te</span>
+        
+            <span>dise</span>
+        
+            <span>:</span>
+        
+            <span>&lt;</span>
+        
+            <span>Mon</span>
+        
+            <span>ami</span>
+        
+            <span>,</span>
+        
+            <span>viens</span>
+        
+            <span>t</span>
+        
+            <span>&#39;</span>
+        
+            <span>asseoir</span>
+        
+            <span>à</span>
+        
+            <span>une</span>
+        
+            <span>meilleure</span>
+        
+            <span>place</span>
+        
+            <span>.</span>
+        
+            <span>&gt;</span>
+        
+            <span>Ainsi</span>
+        
+            <span>,</span>
+        
+            <span>ce</span>
+        
+            <span>sera</span>
+        
+            <span>pour</span>
+        
+            <span>toi</span>
+        
+            <span>un</span>
+        
+            <span>honneur</span>
+        
+            <span>devant</span>
+        
+            <span>tous</span>
+        
+            <span>ceux</span>
+        
+            <span>qui</span>
+        
+            <span>seront</span>
+        
+            <span>à</span>
+        
+            <span>table</span>
+        
+            <span>avec</span>
+        
+            <span>toi</span>
+        
+            <span>.</span>
+        
+            <span>En</span>
+        
+            <span>effet</span>
+        
+            <span>,</span>
+        
+            <span>quiconque</span>
+        
+            <span>s</span>
+        
+            <span>&#39;</span>
+        
+            <span>élève</span>
+        
+            <span>sera</span>
+        
+            <span>abaissé</span>
+        
+            <span>,</span>
+        
+            <span>et</span>
+        
+            <span>celui</span>
+        
+            <span>qui</span>
+        
+            <span>s</span>
+        
+            <span>&#39;</span>
+        
+            <span>abaisse</span>
+        
+            <span>sera</span>
+        
+            <span>élevé</span>
+        
+            <span>.</span>
+        
+            <span>»</span>
+        
+            <span>Puis</span>
+        
+            <span>Jésus</span>
+        
+            <span>dit</span>
+        
+            <span>à</span>
+        
+            <span>celui</span>
+        
+            <span>qui</span>
+        
+            <span>l</span>
+        
+            <span>&#39;</span>
+        
+            <span>avait</span>
+        
+            <span>invité</span>
+        
+            <span>:</span>
+        
+            <span>«</span>
+        
+            <span>Quand</span>
+        
+            <span>tu</span>
+        
+            <span>donnes</span>
+        
+            <span>un</span>
+        
+            <span>déjeuner</span>
+        
+            <span>ou</span>
+        
+            <span>un</span>
+        
+            <span>dîner</span>
+        
+            <span>,</span>
+        
+            <span>n</span>
+        
+            <span>&#39;</span>
+        
+            <span>invite</span>
+        
+            <span>ni</span>
+        
+            <span>tes</span>
+        
+            <span>amis</span>
+        
+            <span>,</span>
+        
+            <span>ni</span>
+        
+            <span>tes</span>
+        
+            <span>frères</span>
+        
+            <span>,</span>
+        
+            <span>ni</span>
+        
+            <span>les</span>
+        
+            <span>membres</span>
+        
+            <span>de</span>
+        
+            <span>ta</span>
+        
+            <span>parenté</span>
+        
+            <span>,</span>
+        
+            <span>ni</span>
+        
+            <span>tes</span>
+        
+            <span>riches</span>
+        
+            <span>voisins</span>
+        
+            <span>;</span>
+        
+            <span>car</span>
+        
+            <span>ils</span>
+        
+            <span>pourraient</span>
+        
+            <span>t</span>
+        
+            <span>&#39;</span>
+        
+            <span>inviter</span>
+        
+            <span>à</span>
+        
+            <span>leur</span>
+        
+            <span>tour</span>
+        
+            <span>et</span>
+        
+            <span>tu</span>
+        
+            <span>serais</span>
+        
+            <span>ainsi</span>
+        
+            <span>payé</span>
+        
+            <span>pour</span>
+        
+            <span>ce</span>
+        
+            <span>que</span>
+        
+            <span>tu</span>
+        
+            <span>as</span>
+        
+            <span>donné</span>
+        
+            <span>.</span>
+        
+            <span>Mais</span>
+        
+            <span>quand</span>
+        
+            <span>tu</span>
+        
+            <span>offres</span>
+        
+            <span>un</span>
+        
+            <span>repas</span>
+        
+            <span>de</span>
+        
+            <span>fête</span>
+        
+            <span>,</span>
+        
+            <span>invite</span>
+        
+            <span>les</span>
+        
+            <span>pauvres</span>
+        
+            <span>,</span>
+        
+            <span>les</span>
+        
+            <span>infirmes</span>
+        
+            <span>,</span>
+        
+            <span>les</span>
+        
+            <span>boiteux</span>
+        
+            <span>et</span>
+        
+            <span>les</span>
+        
+            <span>aveugles</span>
+        
+            <span>.</span>
+        
+            <span>Tu</span>
+        
+            <span>seras</span>
+        
+            <span>heureux</span>
+        
+            <span>,</span>
+        
+            <span>car</span>
+        
+            <span>ils</span>
+        
+            <span>ne</span>
+        
+            <span>peuvent</span>
+        
+            <span>pas</span>
+        
+            <span>te</span>
+        
+            <span>le</span>
+        
+            <span>rendre</span>
+        
+            <span>.</span>
+        
+            <span>Dieu</span>
+        
+            <span>te</span>
+        
+            <span>le</span>
+        
+            <span>rendra</span>
+        
+            <span>lorsque</span>
+        
+            <span>ceux</span>
+        
+            <span>qui</span>
+        
+            <span>ont</span>
+        
+            <span>fait</span>
+        
+            <span>le</span>
+        
+            <span>bien</span>
+        
+            <span>se</span>
+        
+            <span>relèveront</span>
+        
+            <span>de</span>
+        
+            <span>la</span>
+        
+            <span>mort</span>
+        
+            <span>.</span>
+        
+            <span>»</span>
+        
+            <span>Après</span>
+        
+            <span>avoir</span>
+        
+            <span>entendu</span>
+        
+            <span>ces</span>
+        
+            <span>mots</span>
+        
+            <span>,</span>
+        
+            <span>un</span>
+        
+            <span>de</span>
+        
+            <span>ceux</span>
+        
+            <span>qui</span>
+        
+            <span>étaient</span>
+        
+            <span>à</span>
+        
+            <span>table</span>
+        
+            <span>dit</span>
+        
+            <span>à</span>
+        
+            <span>Jésus</span>
+        
+            <span>:</span>
+        
+            <span>«</span>
+        
+            <span>Heureux</span>
+        
+            <span>celui</span>
+        
+            <span>qui</span>
+        
+            <span>prendra</span>
+        
+            <span>son</span>
+        
+            <span>repas</span>
+        
+            <span>dans</span>
+        
+            <span>le</span>
+        
+            <span>Royaume</span>
+        
+            <span>de</span>
+        
+            <span>Dieu</span>
+        
+            <span>!</span>
+        
+            <span>»</span>
+        
+            <span>Jésus</span>
+        
+            <span>lui</span>
+        
+            <span>raconta</span>
+        
+            <span>cette</span>
+        
+            <span>parabole</span>
+        
+            <span>:</span>
+        
+            <span>«</span>
+        
+            <span>Un</span>
+        
+            <span>homme</span>
+        
+            <span>offrit</span>
+        
+            <span>un</span>
+        
+            <span>grand</span>
+        
+            <span>repas</span>
+        
+            <span>auquel</span>
+        
+            <span>il</span>
+        
+            <span>invita</span>
+        
+            <span>beaucoup</span>
+        
+            <span>de</span>
+        
+            <span>monde</span>
+        
+            <span>.</span>
+        
+            <span>A</span>
+        
+            <span>l</span>
+        
+            <span>&#39;</span>
+        
+            <span>heure</span>
+        
+            <span>du</span>
+        
+            <span>repas</span>
+        
+            <span>,</span>
+        
+            <span>il</span>
+        
+            <span>envoya</span>
+        
+            <span>son</span>
+        
+            <span>serviteur</span>
+        
+            <span>dire</span>
+        
+            <span>aux</span>
+        
+            <span>invités</span>
+        
+            <span>:</span>
+        
+            <span>&lt;</span>
+        
+            <span>Venez</span>
+        
+            <span>,</span>
+        
+            <span>car</span>
+        
+            <span>c</span>
+        
+            <span>&#39;</span>
+        
+            <span>est</span>
+        
+            <span>prêt</span>
+        
+            <span>maintenant</span>
+        
+            <span>.</span>
+        
+            <span>&gt;</span>
+        
+            <span>Mais</span>
+        
+            <span>tous</span>
+        
+            <span>,</span>
+        
+            <span>l</span>
+        
+            <span>&#39;</span>
+        
+            <span>un</span>
+        
+            <span>après</span>
+        
+            <span>l</span>
+        
+            <span>&#39;</span>
+        
+            <span>autre</span>
+        
+            <span>,</span>
+        
+            <span>se</span>
+        
+            <span>mirent</span>
+        
+            <span>à</span>
+        
+            <span>s</span>
+        
+            <span>&#39;</span>
+        
+            <span>excuser</span>
+        
+            <span>.</span>
+        
+            <span>Le</span>
+        
+            <span>premier</span>
+        
+            <span>dit</span>
+        
+            <span>au</span>
+        
+            <span>serviteur</span>
+        
+            <span>:</span>
+        
+            <span>&lt;</span>
+        
+            <span>J</span>
+        
+            <span>&#39;</span>
+        
+            <span>ai</span>
+        
+            <span>acheté</span>
+        
+            <span>un</span>
+        
+            <span>champ</span>
+        
+            <span>et</span>
+        
+            <span>il</span>
+        
+            <span>faut</span>
+        
+            <span>que</span>
+        
+            <span>j</span>
+        
+            <span>&#39;</span>
+        
+            <span>aille</span>
+        
+            <span>le</span>
+        
+            <span>voir</span>
+        
+            <span>;</span>
+        
+            <span>je</span>
+        
+            <span>te</span>
+        
+            <span>prie</span>
+        
+            <span>de</span>
+        
+            <span>m</span>
+        
+            <span>&#39;</span>
+        
+            <span>excuser</span>
+        
+            <span>.</span>
+        
+            <span>&gt;</span>
+        
+            <span>Un</span>
+        
+            <span>autre</span>
+        
+            <span>lui</span>
+        
+            <span>dit</span>
+        
+            <span>:</span>
+        
+            <span>&lt;</span>
+        
+            <span>J</span>
+        
+            <span>&#39;</span>
+        
+            <span>ai</span>
+        
+            <span>acheté</span>
+        
+            <span>cinq</span>
+        
+            <span>paires</span>
+        
+            <span>de</span>
+        
+            <span>boeufs</span>
+        
+            <span>et</span>
+        
+            <span>je</span>
+        
+            <span>vais</span>
+        
+            <span>les</span>
+        
+            <span>essayer</span>
+        
+            <span>;</span>
+        
+            <span>je</span>
+        
+            <span>te</span>
+        
+            <span>prie</span>
+        
+            <span>de</span>
+        
+            <span>m</span>
+        
+            <span>&#39;</span>
+        
+            <span>excuser</span>
+        
+            <span>.</span>
+        
+            <span>&gt;</span>
+        
+            <span>Un</span>
+        
+            <span>autre</span>
+        
+            <span>encore</span>
+        
+            <span>dit</span>
+        
+            <span>:</span>
+        
+            <span>&lt;</span>
+        
+            <span>Je</span>
+        
+            <span>viens</span>
+        
+            <span>de</span>
+        
+            <span>me</span>
+        
+            <span>marier</span>
+        
+            <span>et</span>
+        
+            <span>c</span>
+        
+            <span>&#39;</span>
+        
+            <span>est</span>
+        
+            <span>pourquoi</span>
+        
+            <span>je</span>
+        
+            <span>ne</span>
+        
+            <span>peux</span>
+        
+            <span>pas</span>
+        
+            <span>y</span>
+        
+            <span>aller</span>
+        
+            <span>.</span>
+        
+            <span>&gt;</span>
+        
+            <span>Le</span>
+        
+            <span>serviteur</span>
+        
+            <span>retourna</span>
+        
+            <span>auprès</span>
+        
+            <span>de</span>
+        
+            <span>son</span>
+        
+            <span>maître</span>
+        
+            <span>et</span>
+        
+            <span>lui</span>
+        
+            <span>rapporta</span>
+        
+            <span>ces</span>
+        
+            <span>réponses</span>
+        
+            <span>.</span>
+        
+            <span>Le</span>
+        
+            <span>maître</span>
+        
+            <span>de</span>
+        
+            <span>la</span>
+        
+            <span>maison</span>
+        
+            <span>se</span>
+        
+            <span>mit</span>
+        
+            <span>en</span>
+        
+            <span>colère</span>
+        
+            <span>et</span>
+        
+            <span>dit</span>
+        
+            <span>à</span>
+        
+            <span>son</span>
+        
+            <span>serviteur</span>
+        
+            <span>:</span>
+        
+            <span>&lt;</span>
+        
+            <span>Va</span>
+        
+            <span>vite</span>
+        
+            <span>sur</span>
+        
+            <span>les</span>
+        
+            <span>places</span>
+        
+            <span>et</span>
+        
+            <span>dans</span>
+        
+            <span>les</span>
+        
+            <span>rues</span>
+        
+            <span>de</span>
+        
+            <span>la</span>
+        
+            <span>ville</span>
+        
+            <span>,</span>
+        
+            <span>et</span>
+        
+            <span>amène</span>
+        
+            <span>ici</span>
+        
+            <span>les</span>
+        
+            <span>pauvres</span>
+        
+            <span>,</span>
+        
+            <span>les</span>
+        
+            <span>infirmes</span>
+        
+            <span>,</span>
+        
+            <span>les</span>
+        
+            <span>aveugles</span>
+        
+            <span>et</span>
+        
+            <span>les</span>
+        
+            <span>boiteux</span>
+        
+            <span>.</span>
+        
+            <span>&gt;</span>
+        
+            <span>Après</span>
+        
+            <span>un</span>
+        
+            <span>moment</span>
+        
+            <span>,</span>
+        
+            <span>le</span>
+        
+            <span>serviteur</span>
+        
+            <span>vint</span>
+        
+            <span>dire</span>
+        
+            <span>:</span>
+        
+            <span>&lt;</span>
+        
+            <span>Maître</span>
+        
+            <span>,</span>
+        
+            <span>tes</span>
+        
+            <span>ordres</span>
+        
+            <span>ont</span>
+        
+            <span>été</span>
+        
+            <span>exécutés</span>
+        
+            <span>,</span>
+        
+            <span>mais</span>
+        
+            <span>il</span>
+        
+            <span>y</span>
+        
+            <span>a</span>
+        
+            <span>encore</span>
+        
+            <span>de</span>
+        
+            <span>la</span>
+        
+            <span>place</span>
+        
+            <span>.</span>
+        
+            <span>&gt;</span>
+        
+            <span>Le</span>
+        
+            <span>maître</span>
+        
+            <span>dit</span>
+        
+            <span>alors</span>
+        
+            <span>à</span>
+        
+            <span>son</span>
+        
+            <span>serviteur</span>
+        
+            <span>:</span>
+        
+            <span>&lt;</span>
+        
+            <span>Va</span>
+        
+            <span>sur</span>
+        
+            <span>les</span>
+        
+            <span>chemins</span>
+        
+            <span>de</span>
+        
+            <span>campagne</span>
+        
+            <span>,</span>
+        
+            <span>le</span>
+        
+            <span>long</span>
+        
+            <span>des</span>
+        
+            <span>haies</span>
+        
+            <span>,</span>
+        
+            <span>et</span>
+        
+            <span>oblige</span>
+        
+            <span>les</span>
+        
+            <span>gens</span>
+        
+            <span>à</span>
+        
+            <span>entrer</span>
+        
+            <span>,</span>
+        
+            <span>afin</span>
+        
+            <span>que</span>
+        
+            <span>ma</span>
+        
+            <span>maison</span>
+        
+            <span>soit</span>
+        
+            <span>remplie</span>
+        
+            <span>.</span>
+        
+            <span>Je</span>
+        
+            <span>vous</span>
+        
+            <span>le</span>
+        
+            <span>dis</span>
+        
+            <span>:</span>
+        
+            <span>aucun</span>
+        
+            <span>de</span>
+        
+            <span>ceux</span>
+        
+            <span>qui</span>
+        
+            <span>avaient</span>
+        
+            <span>été</span>
+        
+            <span>invités</span>
+        
+            <span>ne</span>
+        
+            <span>mangera</span>
+        
+            <span>de</span>
+        
+            <span>mon</span>
+        
+            <span>repas</span>
+        
+            <span>!</span>
+        
+            <span>&gt;</span>
+        
+            <span>»</span>
+        
+            <span>Une</span>
+        
+            <span>foule</span>
+        
+            <span>immense</span>
+        
+            <span>faisait</span>
+        
+            <span>route</span>
+        
+            <span>avec</span>
+        
+            <span>Jésus</span>
+        
+            <span>.</span>
+        
+            <span>Il</span>
+        
+            <span>se</span>
+        
+            <span>retourna</span>
+        
+            <span>et</span>
+        
+            <span>dit</span>
+        
+            <span>à</span>
+        
+            <span>tous</span>
+        
+            <span>:</span>
+        
+            <span>«</span>
+        
+            <span>Celui</span>
+        
+            <span>qui</span>
+        
+            <span>vient</span>
+        
+            <span>à</span>
+        
+            <span>moi</span>
+        
+            <span>doit</span>
+        
+            <span>me</span>
+        
+            <span>préférer</span>
+        
+            <span>à</span>
+        
+            <span>son</span>
+        
+            <span>père</span>
+        
+            <span>,</span>
+        
+            <span>sa</span>
+        
+            <span>mère</span>
+        
+            <span>,</span>
+        
+            <span>sa</span>
+        
+            <span>femme</span>
+        
+            <span>,</span>
+        
+            <span>ses</span>
+        
+            <span>enfants</span>
+        
+            <span>,</span>
+        
+            <span>ses</span>
+        
+            <span>frères</span>
+        
+            <span>,</span>
+        
+            <span>ses</span>
+        
+            <span>soeurs</span>
+        
+            <span>,</span>
+        
+            <span>et</span>
+        
+            <span>même</span>
+        
+            <span>à</span>
+        
+            <span>sa</span>
+        
+            <span>propre</span>
+        
+            <span>personne</span>
+        
+            <span>.</span>
+        
+            <span>Sinon</span>
+        
+            <span>,</span>
+        
+            <span>il</span>
+        
+            <span>ne</span>
+        
+            <span>peut</span>
+        
+            <span>pas</span>
+        
+            <span>être</span>
+        
+            <span>mon</span>
+        
+            <span>disciple</span>
+        
+            <span>.</span>
+        
+            <span>Celui</span>
+        
+            <span>qui</span>
+        
+            <span>ne</span>
+        
+            <span>porte</span>
+        
+            <span>pas</span>
+        
+            <span>sa</span>
+        
+            <span>croix</span>
+        
+            <span>pour</span>
+        
+            <span>me</span>
+        
+            <span>suivre</span>
+        
+            <span>ne</span>
+        
+            <span>peut</span>
+        
+            <span>pas</span>
+        
+            <span>être</span>
+        
+            <span>mon</span>
+        
+            <span>disciple</span>
+        
+            <span>.</span>
+        
+            <span>Si</span>
+        
+            <span>l</span>
+        
+            <span>&#39;</span>
+        
+            <span>un</span>
+        
+            <span>de</span>
+        
+            <span>vous</span>
+        
+            <span>veut</span>
+        
+            <span>construire</span>
+        
+            <span>une</span>
+        
+            <span>tour</span>
+        
+            <span>,</span>
+        
+            <span>il</span>
+        
+            <span>s</span>
+        
+            <span>&#39;</span>
+        
+            <span>assied</span>
+        
+            <span>d</span>
+        
+            <span>&#39;</span>
+        
+            <span>abord</span>
+        
+            <span>pour</span>
+        
+            <span>calculer</span>
+        
+            <span>la</span>
+        
+            <span>dépense</span>
+        
+            <span>et</span>
+        
+            <span>voir</span>
+        
+            <span>s</span>
+        
+            <span>&#39;</span>
+        
+            <span>il</span>
+        
+            <span>a</span>
+        
+            <span>assez</span>
+        
+            <span>d</span>
+        
+            <span>&#39;</span>
+        
+            <span>argent</span>
+        
+            <span>pour</span>
+        
+            <span>achever</span>
+        
+            <span>le</span>
+        
+            <span>travail</span>
+        
+            <span>.</span>
+        
+            <span>Autrement</span>
+        
+            <span>,</span>
+        
+            <span>s</span>
+        
+            <span>&#39;</span>
+        
+            <span>il</span>
+        
+            <span>pose</span>
+        
+            <span>les</span>
+        
+            <span>fondations</span>
+        
+            <span>sans</span>
+        
+            <span>pouvoir</span>
+        
+            <span>achever</span>
+        
+            <span>la</span>
+        
+            <span>tour</span>
+        
+            <span>,</span>
+        
+            <span>tous</span>
+        
+            <span>ceux</span>
+        
+            <span>qui</span>
+        
+            <span>verront</span>
+        
+            <span>cela</span>
+        
+            <span>se</span>
+        
+            <span>mettront</span>
+        
+            <span>à</span>
+        
+            <span>rire</span>
+        
+            <span>de</span>
+        
+            <span>lui</span>
+        
+            <span>en</span>
+        
+            <span>disant</span>
+        
+            <span>:</span>
+        
+            <span>&lt;</span>
+        
+            <span>Cet</span>
+        
+            <span>homme</span>
+        
+            <span>a</span>
+        
+            <span>commencé</span>
+        
+            <span>de</span>
+        
+            <span>construire</span>
+        
+            <span>mais</span>
+        
+            <span>a</span>
+        
+            <span>été</span>
+        
+            <span>incapable</span>
+        
+            <span>d</span>
+        
+            <span>&#39;</span>
+        
+            <span>achever</span>
+        
+            <span>le</span>
+        
+            <span>travail</span>
+        
+            <span>!</span>
+        
+            <span>&gt;</span>
+        
+            <span>De</span>
+        
+            <span>même</span>
+        
+            <span>,</span>
+        
+            <span>si</span>
+        
+            <span>un</span>
+        
+            <span>roi</span>
+        
+            <span>veut</span>
+        
+            <span>partir</span>
+        
+            <span>en</span>
+        
+            <span>guerre</span>
+        
+            <span>contre</span>
+        
+            <span>un</span>
+        
+            <span>autre</span>
+        
+            <span>roi</span>
+        
+            <span>,</span>
+        
+            <span>il</span>
+        
+            <span>s</span>
+        
+            <span>&#39;</span>
+        
+            <span>assied</span>
+        
+            <span>d</span>
+        
+            <span>&#39;</span>
+        
+            <span>abord</span>
+        
+            <span>pour</span>
+        
+            <span>examiner</span>
+        
+            <span>s</span>
+        
+            <span>&#39;</span>
+        
+            <span>il</span>
+        
+            <span>peut</span>
+        
+            <span>,</span>
+        
+            <span>avec</span>
+        
+            <span>dix</span>
+        
+            <span>mille</span>
+        
+            <span>hommes</span>
+        
+            <span>,</span>
+        
+            <span>affronter</span>
+        
+            <span>son</span>
+        
+            <span>adversaire</span>
+        
+            <span>qui</span>
+        
+            <span>marche</span>
+        
+            <span>contre</span>
+        
+            <span>lui</span>
+        
+            <span>avec</span>
+        
+            <span>vingt</span>
+        
+            <span>mille</span>
+        
+            <span>hommes</span>
+        
+            <span>.</span>
+        
+            <span>S</span>
+        
+            <span>&#39;</span>
+        
+            <span>il</span>
+        
+            <span>ne</span>
+        
+            <span>le</span>
+        
+            <span>peut</span>
+        
+            <span>pas</span>
+        
+            <span>,</span>
+        
+            <span>il</span>
+        
+            <span>envoie</span>
+        
+            <span>des</span>
+        
+            <span>messagers</span>
+        
+            <span>à</span>
+        
+            <span>l</span>
+        
+            <span>&#39;</span>
+        
+            <span>autre</span>
+        
+            <span>roi</span>
+        
+            <span>,</span>
+        
+            <span>pendant</span>
+        
+            <span>qu</span>
+        
+            <span>&#39;</span>
+        
+            <span>il</span>
+        
+            <span>est</span>
+        
+            <span>encore</span>
+        
+            <span>loin</span>
+        
+            <span>,</span>
+        
+            <span>pour</span>
+        
+            <span>lui</span>
+        
+            <span>demander</span>
+        
+            <span>ses</span>
+        
+            <span>conditions</span>
+        
+            <span>de</span>
+        
+            <span>paix</span>
+        
+            <span>.</span>
+        
+            <span>Ainsi</span>
+        
+            <span>donc</span>
+        
+            <span>,</span>
+        
+            <span>ajouta</span>
+        
+            <span>Jésus</span>
+        
+            <span>,</span>
+        
+            <span>aucun</span>
+        
+            <span>de</span>
+        
+            <span>vous</span>
+        
+            <span>ne</span>
+        
+            <span>peut</span>
+        
+            <span>être</span>
+        
+            <span>mon</span>
+        
+            <span>disciple</span>
+        
+            <span>s</span>
+        
+            <span>&#39;</span>
+        
+            <span>il</span>
+        
+            <span>ne</span>
+        
+            <span>renonce</span>
+        
+            <span>pas</span>
+        
+            <span>à</span>
+        
+            <span>tout</span>
+        
+            <span>ce</span>
+        
+            <span>qu</span>
+        
+            <span>&#39;</span>
+        
+            <span>il</span>
+        
+            <span>possède</span>
+        
+            <span>.</span>
+        
+            <span>»</span>
+        
+            <span>«</span>
+        
+            <span>Le</span>
+        
+            <span>sel</span>
+        
+            <span>est</span>
+        
+            <span>une</span>
+        
+            <span>bonne</span>
+        
+            <span>chose</span>
+        
+            <span>.</span>
+        
+            <span>Mais</span>
+        
+            <span>s</span>
+        
+            <span>&#39;</span>
+        
+            <span>il</span>
+        
+            <span>perd</span>
+        
+            <span>son</span>
+        
+            <span>goût</span>
+        
+            <span>,</span>
+        
+            <span>comment</span>
+        
+            <span>pourrait</span>
+        
+            <span>-</span>
+        
+            <span>on</span>
+        
+            <span>le</span>
+        
+            <span>lui</span>
+        
+            <span>rendre</span>
+        
+            <span>?</span>
+        
+            <span>Il</span>
+        
+            <span>n</span>
+        
+            <span>&#39;</span>
+        
+            <span>est</span>
+        
+            <span>alors</span>
+        
+            <span>bon</span>
+        
+            <span>ni</span>
+        
+            <span>pour</span>
+        
+            <span>la</span>
+        
+            <span>terre</span>
+        
+            <span>,</span>
+        
+            <span>ni</span>
+        
+            <span>pour</span>
+        
+            <span>le</span>
+        
+            <span>fumier</span>
+        
+            <span>;</span>
+        
+            <span>on</span>
+        
+            <span>le</span>
+        
+            <span>jette</span>
+        
+            <span>dehors</span>
+        
+            <span>.</span>
+        
+            <span>Écoutez</span>
+        
+            <span>bien</span>
+        
+            <span>,</span>
+        
+            <span>si</span>
+        
+            <span>vous</span>
+        
+            <span>avez</span>
+        
+            <span>des</span>
+        
+            <span>oreilles</span>
+        
+            <span>pour</span>
+        
+            <span>entendre</span>
+        
+            <span>!</span>
+        
+            <span>»</span>
+        
+    </p>
+</div>
+
+
+<button id="showSolution">Afficher la solution</button>
+<h2 id="chapterTitle" style="display: none;">
+    Le chapitre choisi était : Luc 14 !
+</h2>
+
+<script>
+    document.getElementById("showSolution").addEventListener("click", function() {
+        document.getElementById("solution").style.display = "block"; // Affiche la solution
+        document.getElementById("maskedText").style.display = "none"; // Cache les mots cachés
+        document.getElementById("chapterTitle").style.display = "block"; // 🔹 Affiche le titre du chapitre
+    });
+</script>
+
+
+<script>
+        function hsvToRgb(h, s, v) {
+            let r, g, b;
+            let i = Math.floor(h * 6);
+            let f = h * 6 - i;
+            let p = v * (1 - s);
+            let q = v * (1 - f * s);
+            let t = v * (1 - (1 - f) * s);
+            switch (i % 6) {
+                case 0: r = v, g = t, b = p; break;
+                case 1: r = q, g = v, b = p; break;
+                case 2: r = p, g = v, b = t; break;
+                case 3: r = p, g = q, b = v; break;
+                case 4: r = t, g = p, b = v; break;
+                case 5: r = v, g = p, b = q; break;
+            }
+            return `rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)})`;
+        }
+
+        const categories = [
+            { name: "Pentateuque", key: "pentateuque" },
+            { name: "Historiques", key: "historiques" },
+            { name: "Sagesse", key: "sagesse" },
+            { name: "Grands Prophètes", key: "grands-prophetes" },
+            { name: "Petits Prophètes", key: "petits-prophetes" },
+            { name: "Évangiles", key: "evangiles" },
+            { name: "Histoire de l'Église", key: "histoire-eglise" },
+            { name: "Épîtres de Paul", key: "epitres-paul" },
+            { name: "Épîtres Générales", key: "epitres-generales" },
+            { name: "Prophétie", key: "prophétie" }
+        ];
+
+        // 🔹 Générer les couleurs pastels avec HSV (s = 0.7, v = 1)
+        categories.forEach((category, index) => {
+            let hue = index / categories.length; // De 0 à 1 linéairement
+            category.color = hsvToRgb(hue, 0.7, 1);
+        });
+
+const books = [
+    // 📜 Pentateuque
+    { name: "Gn", category: "pentateuque" }, { name: "Ex", category: "pentateuque" },
+    { name: "Lv", category: "pentateuque" }, { name: "Nb", category: "pentateuque" },
+    { name: "Dt", category: "pentateuque" },
+
+    // 🏰 Livres historiques
+    { name: "Jos", category: "historiques" }, { name: "Jg", category: "historiques" },
+    { name: "Rt", category: "historiques" }, { name: "1S", category: "historiques" },
+    { name: "2S", category: "historiques" }, { name: "1R", category: "historiques" },
+    { name: "2R", category: "historiques" }, { name: "1Ch", category: "historiques" },
+    { name: "2Ch", category: "historiques" }, { name: "Esd", category: "historiques" },
+    { name: "Ne", category: "historiques" }, { name: "Est", category: "historiques" },
+
+    // 🎭 Livres de Sagesse
+    { name: "Job", category: "sagesse" }, { name: "Ps", category: "sagesse" },
+    { name: "Pr", category: "sagesse" }, { name: "Ec", category: "sagesse" },
+    { name: "Ct", category: "sagesse" },
+
+    // 📢 Grands Prophètes
+    { name: "Es", category: "grands-prophetes" }, { name: "Jr", category: "grands-prophetes" },
+    { name: "Lm", category: "grands-prophetes" }, { name: "Ez", category: "grands-prophetes" },
+    { name: "Dn", category: "grands-prophetes" },
+
+    // 🔥 Petits Prophètes
+    { name: "Os", category: "petits-prophetes" }, { name: "Jl", category: "petits-prophetes" },
+    { name: "Am", category: "petits-prophetes" }, { name: "Ab", category: "petits-prophetes" },
+    { name: "Jon", category: "petits-prophetes" }, { name: "Mi", category: "petits-prophetes" },
+    { name: "Na", category: "petits-prophetes" }, { name: "Ha", category: "petits-prophetes" },
+    { name: "So", category: "petits-prophetes" }, { name: "Ag", category: "petits-prophetes" },
+    { name: "Za", category: "petits-prophetes" }, { name: "Ml", category: "petits-prophetes" },
+
+    // ✝️ Évangiles
+    { name: "Mt", category: "evangiles" }, { name: "Mc", category: "evangiles" },
+    { name: "Lc", category: "evangiles" }, { name: "Jn", category: "evangiles" },
+
+    // 🏛️ Histoire de l'Église
+    { name: "Ac", category: "histoire-eglise" },
+
+    // 📜 Épîtres de Paul
+    { name: "Rm", category: "epitres-paul" }, { name: "1Co", category: "epitres-paul" },
+    { name: "2Co", category: "epitres-paul" }, { name: "Ga", category: "epitres-paul" },
+    { name: "Ep", category: "epitres-paul" }, { name: "Ph", category: "epitres-paul" },
+    { name: "Col", category: "epitres-paul" }, { name: "1Th", category: "epitres-paul" },
+    { name: "2Th", category: "epitres-paul" }, { name: "1Tm", category: "epitres-paul" },
+    { name: "2Tm", category: "epitres-paul" }, { name: "Tt", category: "epitres-paul" },
+    { name: "Phm", category: "epitres-paul" }, { name: "He", category: "epitres-paul" },
+
+    // ✉️ Épîtres Générales
+    { name: "Jc", category: "epitres-generales" }, { name: "1P", category: "epitres-generales" },
+    { name: "2P", category: "epitres-generales" }, { name: "1Jn", category: "epitres-generales" },
+    { name: "2Jn", category: "epitres-generales" }, { name: "3Jn", category: "epitres-generales" },
+    { name: "Jd", category: "epitres-generales" },
+
+    // 🔮 Prophétie
+    { name: "Ap", category: "prophétie" }
+];
+
+// Récupération de l'élément conteneur
+let container = document.getElementById("bibleBooks");
+
+// 🔹 Étape 1 : Afficher tous les livres (avec leurs couleurs de catégorie)
+let allBooksDiv = document.createElement("div");
+allBooksDiv.classList.add("all-books-container");
+
+books.forEach(book => {
+    let category = categories.find(cat => cat.key === book.category); // Trouver la catégorie
+    let color = category ? category.color : "gray"; // Utiliser la couleur de la catégorie
+
+    let button = document.createElement("button");
+    button.textContent = book.name;
+    button.classList.add("livre");
+    button.style.background = `linear-gradient(to right, ${color}, white)`; // Appliquer la couleur
+
+    button.addEventListener("click", function() {
+        if (book.name === questionBook) {
+            button.classList.add("correct");
+        } else {
+            button.classList.add("wrong");
+        }
+    });
+
+    allBooksDiv.appendChild(button);
+});
+
+container.appendChild(allBooksDiv);
+
+    </script>
+
+
+</body>
+</html>
