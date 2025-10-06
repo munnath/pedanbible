@@ -1,2 +1,2 @@
 # pedanbible
-Pedantix pour lire la bible
+https://munnath.github.io/pedanbible/
